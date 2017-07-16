@@ -1,12 +1,11 @@
 function createTodoItem(title) {
-
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.className = 'checkbox';
 
     const label = document.createElement('label');
     label.innerText = title;
-    label.className = title;
+    label.className = 'title';
 
     const  editInput = document.createElement('input');
     editInput.type = 'text';
@@ -29,14 +28,19 @@ function createTodoItem(title) {
     listItem.appendChild(editButton);
     listItem.appendChild(deleteButton);
 
+    bindEvents(listItem);
+
     return listItem;
 }
 
 function bindEvents(todoItem) {
-    // доступ к checkbox и двум кнопкам
     const checkbox = todoItem.querySelector('.checkbox');
     const editButton = todoItem.querySelector('button.edit');
     const deleteButton = todoItem.querySelector('button.delete');
+
+    checkbox.addEventListener('change', toggleTodoItem);
+    editButton.addEventListener('click', editTodoItem);
+    deleteButton.addEventListener('click', deleteTodoItem);
 }
 
 function addTodoItem(event) {
@@ -47,6 +51,33 @@ function addTodoItem(event) {
     const todoItem = createTodoItem(addInput.value);
     todoList.appendChild(todoItem);
     addInput.value = '';
+}
+
+function toggleTodoItem() {
+    const listItem = this.parentNode;
+    listItem.classList.toggle('completed');
+}
+
+function editTodoItem() {
+    const listItem = this.parentNode;
+    const title = listItem.querySelector('.title');
+    const editInput = listItem.querySelector('.textfield');
+    const isEditing = listItem.classList.contains('editing');
+
+    if (isEditing) {
+        title.innerText = editInput.value;
+        this.innerText = 'Изменить';
+    } else {
+        editInput.value = title.innerText;
+        this.innerText = 'Сохранить';
+    }
+
+    listItem.classList.toggle('editing');
+}
+
+function deleteTodoItem() {
+    const listItem = this.parentNode;
+    todoList.removeChild(listItem);
 }
 
 const todoForm = document.getElementById('todo-form');
