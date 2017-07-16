@@ -83,6 +83,13 @@ function deleteTodoItem() {
 const todoForm = document.getElementById('todo-form');
 const addInput = document.getElementById('add-input');
 const todoList = document.getElementById('todo-list');
-const todoItems = document.querySelectorAll('.todo-item');
+const todoItems = document.querySelectorAll('.todo-item'); // отдает массив, а не объект, как getElement
 
-todoForm.addEventListener('submit', addTodoItem);
+function main() {
+    todoForm.addEventListener('submit', addTodoItem);
+    // для всех эл-ов, которые уже есть нужно вызавть функцию bindEvents
+    todoItems.forEach(item => bindEvents(item));
+}
+
+main();
+
